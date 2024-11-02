@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
     #Обновляет значения QSpinBox для заданной точки (i, j)
     def update_spinbox(self, i, j):
         x, y, z = self.bezier_surface.control_points[i][j]
-        #self.spinbox_dict[(i, j)][0].setValue(int(x))
+        self.spinbox_dict[(i, j)][0].setValue(float(x))
         self.spinbox_dict[(i, j)][1].setValue(float(y))
         self.spinbox_dict[(i, j)][2].setValue(float(z))
 
