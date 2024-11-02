@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSlider, QPushButton, QSpinBox, QGroupBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSlider, QPushButton, QDoubleSpinBox, QGroupBox
 from PyQt5.QtCore import Qt
 from bezier_surface import BezierSurface
 from bezier_canvas import BezierCanvas
@@ -64,8 +64,8 @@ class MainWindow(QMainWindow):
             label = QLabel(f"Поворот вокруг {axis}:")
             increase_button = QPushButton("-")
             decrease_button = QPushButton("+")
-            increase_button.clicked.connect(lambda _, ax=axis: self.rotate_control_points(ax, 5))
-            decrease_button.clicked.connect(lambda _, ax=axis: self.rotate_control_points(ax, -5))
+            increase_button.clicked.connect(lambda _, ax=axis: self.rotate_control_points(ax, 30))
+            decrease_button.clicked.connect(lambda _, ax=axis: self.rotate_control_points(ax, -30))
             button_layout.addWidget(label)
             button_layout.addWidget(increase_button)
             button_layout.addWidget(decrease_button)
@@ -82,12 +82,12 @@ class MainWindow(QMainWindow):
                 label = QLabel(f"Point [{i},{j}]:")
                 spinboxes = []
                 for k, coord in enumerate("XYZ"):
-                    spinbox = QSpinBox()
+                    spinbox = QDoubleSpinBox()
                     spinbox.setRange(-10, 10)  # Увеличенный диапазон
-                    spinbox.setValue(int(point[k]))
+                    spinbox.setValue(float(point[k]))
                     spinbox.valueChanged.connect(lambda value, i=i, j=j, k=k: self.update_control_point(i, j, k, value))
                     spinboxes.append(spinbox)
-                # Сохраняем ссылку на QSpinBox для последующего обновления
+                # Сохраняем ссылку на QDoubleSpinBox для последующего обновления
                 self.spinbox_dict[(i, j)] = spinboxes
                 point_layout.addWidget(label)
                 point_layout.addWidget(spinboxes[0])
@@ -131,9 +131,9 @@ class MainWindow(QMainWindow):
     #Обновляет значения QSpinBox для заданной точки (i, j)
     def update_spinbox(self, i, j):
         x, y, z = self.bezier_surface.control_points[i][j]
-        self.spinbox_dict[(i, j)][0].setValue(int(x))
-        self.spinbox_dict[(i, j)][1].setValue(int(y))
-        self.spinbox_dict[(i, j)][2].setValue(int(z))
+        #self.spinbox_dict[(i, j)][0].setValue(int(x))
+        self.spinbox_dict[(i, j)][1].setValue(float(y))
+        self.spinbox_dict[(i, j)][2].setValue(float(z))
 
     #Обновляет контрольную точку и график при изменении значения в QSpinBox
     def update_control_point(self, i, j, k, value):
